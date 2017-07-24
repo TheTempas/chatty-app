@@ -1,30 +1,23 @@
 {
-  "name": "react-simple-boilerplate",
+  "name": "chatty-app",
   "version": "1.0.0",
-  "description": "Simple and lightweight Boilerplate for ReactJS projects",
+  "description": "Real time web chatting application modeled after Slack using libraries React, Babel, and WebPack",
   "scripts": {
     "lint": "eslint --ext .jsx,.js src",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/noahlotzer/react-simple-boilerplate.git"
+    "url": "git@github.com:TheTempas/chatty-app.git"
   },
   "keywords": [
     "react",
     "reactjs",
-    "boilerplate",
-    "reload",
-    "live",
-    "edit",
+    "babel",
     "webpack"
   ],
-  "author": "Noah-Jerome Lotzer <n.lotzer@neusta.de>",
+  "author": "TheTempas",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/noahlotzer/react-simple-boilerplate/issues"
-  },
-  "homepage": "https://github.com/noahlotzer/react-simple-boilerplate",
   "engines": {
     "node": ">=6.0.0"
   },

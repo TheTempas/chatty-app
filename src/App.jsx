@@ -21,8 +21,20 @@ class App extends Component {
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ]
-  }
+    }
+    this.addNewMessage = this.addNewMessage.bind(this);
 }
+
+  addNewMessage (event) {
+    // the event parameter is data to do with this particular event (onKeyUp for any key)
+    console.log("Update state");
+    if (event.keyCode === 13) {
+      let newMessage = {username: this.state.currentUser.name, content: event.target.value};
+      let messages = this.state.messages.concat(newMessage);
+      this.setState({messages: messages});
+      event.target.value = '';
+    }
+  }
 
   render() {
     return (
@@ -31,7 +43,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} />
+        <ChatBar currentUser={this.state.currentUser} addNewMessage={this.addNewMessage}/>
       </div>
     );
   }

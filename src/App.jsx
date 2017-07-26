@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import uuidv1 from 'uuid/v1';
+
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
@@ -15,41 +17,39 @@ class App extends Component {
     super(props)
     this.state = {
           currentUser: {name: "Joe"},
-          messages: [
-        {
-          id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?"
-        },
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+          messages: []
         }
-      ]
-    }
     this.addNewMessage = this.addNewMessage.bind(this);
-    this.renderMessage = this.renderMessage.bind(this);
-
-    socket.addEventListener("message", this.renderMessage)
-
-    // Everything in constructor sets up the game so to speak: door open (listening), received message.
   }
+    // Everything in constructor sets up the game so to speak: door open (listening), received message.
 
   addNewMessage (event) {
     // event is data to do with this particular event (onKeyUp for a specific key)
     console.log("Update state");
     if (event.keyCode === 13) {
-      let newMessage = {username: this.state.currentUser.name, content: event.target.value};
+      let newMessage = {id: uuidv1(), username: this.state.currentUser.name, content: event.target.value};
       socket.send(JSON.stringify(newMessage));
       event.target.value = '';
     }
   }
 
-  renderMessage (event) {
-    let newMessage = JSON.parse(event.data);
+  renderMessage (newMessage) {
     let messages = this.state.messages.concat(newMessage);
     this.setState({messages: messages});
+  }
+
+  componentDidMount() {
+    socket.onopen = function () {
+      console.log("Connected to chatty-server");
+    }
+    socket.onmessage = (event) => {
+      let input = JSON.parse(event.data);
+      console.log("String", input);
+      this.renderMessage(input);
+      // Here is where all the other clients render the message on their browser.
+
+    }
+    console.log("componentDidMount <App />");
   }
 
   render() {
@@ -63,6 +63,8 @@ class App extends Component {
       </div>
     );
   }
-}
 
+// Bind: takes a function, then assigns it an object, when that function is running if it calls this
+// for example this.setState
+}
 export default App;

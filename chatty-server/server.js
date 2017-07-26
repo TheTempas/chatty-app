@@ -17,10 +17,17 @@ const wss = new SocketServer({ server });
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
-ws.on('message', function incoming(data) {
-  console.log(data);
-  ws.send(data);
-});
+  ws.on('message', (data) => {
+    console.log(data);
+    wss.clients.forEach(function (client) {
+      // Anyone connected to web socket is a client in the forEach all clients being assigned a web socket.
+      // if (client !== ws && client.readyState === WebSocket.OPEN) {
+      // If client is not sender and web socket is open send message to all clients.
+        client.send(JSON.stringify(JSON.parse(data)));
+      // Send stringified data back to browser as a message.
+      // }
+    });
+  });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));

@@ -3,7 +3,13 @@ import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
+const socket = new WebSocket("ws://localhost:3001");
+console.log("Connected to chatty-app server");
+
 class App extends Component {
+// Class is the blueprint of a car.
+// When you run the code and constructor is executed the car is built.
+// Now that you have the car, "this" refers to the car throughout.
 
   constructor(props) {
     super(props)
@@ -23,17 +29,27 @@ class App extends Component {
       ]
     }
     this.addNewMessage = this.addNewMessage.bind(this);
-}
+    this.renderMessage = this.renderMessage.bind(this);
+
+    socket.addEventListener("message", this.renderMessage)
+
+    // Everything in constructor sets up the game so to speak: door open (listening), received message.
+  }
 
   addNewMessage (event) {
-    // the event parameter is data to do with this particular event (onKeyUp for any key)
+    // event is data to do with this particular event (onKeyUp for a specific key)
     console.log("Update state");
     if (event.keyCode === 13) {
       let newMessage = {username: this.state.currentUser.name, content: event.target.value};
-      let messages = this.state.messages.concat(newMessage);
-      this.setState({messages: messages});
+      socket.send(JSON.stringify(newMessage));
       event.target.value = '';
     }
+  }
+
+  renderMessage (event) {
+    let newMessage = JSON.parse(event.data);
+    let messages = this.state.messages.concat(newMessage);
+    this.setState({messages: messages});
   }
 
   render() {

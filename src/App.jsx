@@ -16,12 +16,21 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-          currentUser: {name: "Joe"},
+          currentUser: {name: "Anonymouse"},
           messages: []
         }
     this.addNewMessage = this.addNewMessage.bind(this);
+    this.setCurrentUser = this.setCurrentUser.bind(this);
   }
     // Everything in constructor sets up the game so to speak: door open (listening), received message.
+
+  setCurrentUser (event) {
+    console.log("setting current user");
+    if (event.keyCode === 13) {
+      let currentUser = {name: event.target.value}
+      this.setState({currentUser: currentUser});
+    }
+  }
 
   addNewMessage (event) {
     // event is data to do with this particular event (onKeyUp for a specific key)
@@ -59,7 +68,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} addNewMessage={this.addNewMessage}/>
+        <ChatBar currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} addNewMessage={this.addNewMessage}/>
       </div>
     );
   }

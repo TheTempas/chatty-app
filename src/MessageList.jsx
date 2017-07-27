@@ -8,16 +8,18 @@ class MessageList extends Component {
     return (
       <main className="messages">
         {this.props.messages.map(message => {
+          console.log("message", message);
           return (
-            <Message key={message.id} username={message.username} content={message.content} />
-          )
-        })}
-        <div className="message system">
-          Anonymous1 changed their name to nomnom.
-        </div>
+            <Message key={message.id} username={message.username} content={message.content} type={message.type} previoususer={message.previoususer} name={message.name} />
+            )
+          }
+        )
+      }
       </main>
     )
   }
 }
+
+// <Message /> takes values out of messages, iteraties and passes to Message.jsx
 
 export default MessageList;

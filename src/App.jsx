@@ -27,38 +27,55 @@ class App extends Component {
   setCurrentUser (event) {
     console.log("setting current user");
     if (event.keyCode === 13) {
-      let currentUser = {name: event.target.value}
+      let currentUser = {previoususer: this.state.currentUser.name, name: event.target.value, type: "postNotification"}
+      socket.send(JSON.stringify(currentUser));
       this.setState({currentUser: currentUser});
     }
   }
 
   addNewMessage (event) {
     // event is data to do with this particular event (onKeyUp for a specific key)
-    console.log("Update state");
+    console.log("Adding new message");
     if (event.keyCode === 13) {
-      let newMessage = {id: uuidv1(), username: this.state.currentUser.name, content: event.target.value};
+      let newMessage = {id: uuidv1(), username: this.state.currentUser.name, content: event.target.value, type: "postMessage"};
       socket.send(JSON.stringify(newMessage));
       event.target.value = '';
     }
   }
 
   renderMessage (newMessage) {
+    // console.log(newMessage);
     let messages = this.state.messages.concat(newMessage);
+    console.log(messages);
     this.setState({messages: messages});
+    console.log(this.state);
   }
 
   componentDidMount() {
-    socket.onopen = function () {
+    // console.log("componentDidMount <App />");
+
+    socket.onopen = (event) => {
       console.log("Connected to chatty-server");
     }
     socket.onmessage = (event) => {
+      // console.log(event);
       let input = JSON.parse(event.data);
       console.log("String", input);
-      this.renderMessage(input);
-      // Here is where all the other clients render the message on their browser.
 
+      switch(input.type) {
+        case "postMessage":
+          this.renderMessage(input);
+          // Here is where all the other clients render the message on their browser.
+
+        break;
+        case "postNotification":
+          this.renderMessage(input);
+
+        break;
+        default:
+        throw new Error ("Unknown event type " + input.type);
+      }
     }
-    console.log("componentDidMount <App />");
   }
 
   render() {
@@ -72,6 +89,8 @@ class App extends Component {
       </div>
     );
   }
+
+// <MessageList /> takes information from this.state that it will need for its render function
 
 // Bind: takes a function, then assigns it an object, when that function is running if it calls this
 // for example this.setState

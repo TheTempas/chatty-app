@@ -38,7 +38,7 @@ class App extends Component {
     // event is data to do with this particular event (onKeyUp for a specific key)
     console.log("Adding new message");
     if (event.keyCode === 13) {
-      let newMessage = {id: uuidv1(), username: this.state.currentUser.name, content: event.target.value, type: "postMessage"};
+      let newMessage = {id: uuidv1(), username: this.state.currentUser.name, content: event.target.value, type: "postMessage", color: this.state.color};
       socket.send(JSON.stringify(newMessage));
       event.target.value = '';
     }
@@ -74,6 +74,10 @@ class App extends Component {
 
         case "connectedClients":
           this.setState({numberUsers: input.connectedClients});
+        break;
+
+        case "userColor":
+          this.setState({color: input.color});
 
         break;
         default:

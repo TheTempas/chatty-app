@@ -13,11 +13,15 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
+// Set up a callback that will run when a client connects to the server.
+// When a client connects they are assigned a socket, represented by the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+
+  wss.clients.forEach(function (client) {
+    let numberConnectedClients = {connectedClients: wss.clients.size, type: "connectedClients"};
+    client.send(JSON.stringify(numberConnectedClients));
+    });
 
   ws.on('message', (data) => {
     console.log(data);
@@ -35,6 +39,7 @@ wss.on('connection', (ws) => {
   ws.on('close', () => console.log('Client disconnected'));
 });
 
+
 // wss.broadcast = function(data) {
 //   wss.clients.forEach(function(client) {
 //     client.send(data)
@@ -47,5 +52,4 @@ wss.on('connection', (ws) => {
 //   message.id = uid.v1();
 
 //   let command = message.content.match(/^\/giphy\W+(w.*)$/i)
-
 // }

@@ -17,7 +17,8 @@ class App extends Component {
     super(props)
     this.state = {
           currentUser: {name: "Anonymouse"},
-          messages: []
+          messages: [],
+          numberUsers: 0
         }
     this.addNewMessage = this.addNewMessage.bind(this);
     this.setCurrentUser = this.setCurrentUser.bind(this);
@@ -58,7 +59,6 @@ class App extends Component {
       console.log("Connected to chatty-server");
     }
     socket.onmessage = (event) => {
-      // console.log(event);
       let input = JSON.parse(event.data);
       console.log("String", input);
 
@@ -66,10 +66,14 @@ class App extends Component {
         case "postMessage":
           this.renderMessage(input);
           // Here is where all the other clients render the message on their browser.
-
         break;
+
         case "postNotification":
           this.renderMessage(input);
+        break;
+
+        case "connectedClients":
+          this.setState({numberUsers: input.connectedClients});
 
         break;
         default:
@@ -83,6 +87,7 @@ class App extends Component {
       <div className="wrapper">
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span>{this.state.numberUsers} users online</span>
         </nav>
         <MessageList messages={this.state.messages} />
         <ChatBar currentUser={this.state.currentUser} setCurrentUser={this.setCurrentUser} addNewMessage={this.addNewMessage}/>

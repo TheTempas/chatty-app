@@ -3,7 +3,7 @@
 Chatty-App is a real time web chatting application modeled after Slack using libraries React, Babel, and WebPack.
 
 ## Screenshot
-!["Screenshot of users chatting, including sending images"](#)
+!["Screenshot of users chatting, including sending images"](https://github.com/TheTempas/chatty-app/blob/master/docs/users-chatting.png)
 
 ### Dependencies
 

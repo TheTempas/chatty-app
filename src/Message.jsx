@@ -4,12 +4,25 @@ class Message extends Component {
   render () {
 
     if (this.props.type === "postMessage") {
-      return (
-      <div className="message">
-        <span className="message-username" style={{color: this.props.color}}>{this.props.username}</span>
-        <span className="message-content">{this.props.content}</span>
-      </div>
-      )
+      let regexep = /(jpg|png|gif)/
+      if (this.props.content.match(regexep)) {
+        return (
+        <div className="message">
+          <span className="message-username" style={{color: this.props.color}}>{this.props.username}</span>
+          <span className="message-content">
+            <img src={this.props.content} />
+          </span>
+        </div>
+        )
+      }
+      else {
+        return (
+          <div className="message">
+            <span className="message-username" style={{color: this.props.color}}>{this.props.username}</span>
+            <span className="message-content">{this.props.content}</span>
+          </div>
+        )
+      }
     }
 
     else if (this.props.type === "postNotification") {

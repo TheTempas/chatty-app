@@ -45,22 +45,18 @@ class App extends Component {
   }
 
   renderMessage (newMessage) {
-    // console.log(newMessage);
     let messages = this.state.messages.concat(newMessage);
-    console.log(messages);
     this.setState({messages: messages});
-    console.log(this.state);
   }
 
   componentDidMount() {
-    // console.log("componentDidMount <App />");
+    console.log("componentDidMount <App />");
 
     socket.onopen = (event) => {
       console.log("Connected to chatty-server");
     }
     socket.onmessage = (event) => {
       let input = JSON.parse(event.data);
-      console.log("String", input);
 
       switch(input.type) {
         case "postMessage":

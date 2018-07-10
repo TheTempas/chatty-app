@@ -14,5 +14,5 @@ Chatty-App is a real time web chatting application modeled after Slack using lib
 ### Web Application Setup
 
 - Install dependencies (`npm install`)
-- Runn development server (`npm start`)
+- Run development server (`npm start`)
 - Go to http://localhost:3000/ in your browser
